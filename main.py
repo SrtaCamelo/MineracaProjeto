@@ -1,10 +1,9 @@
 from Preprocess.Emotional_Words import getDictionary
 from Preprocess.MovieReviewDatasetPreprocessing import getData
 from Preprocess.sequencing import text_to_tfidf, text_to_onehot
-
-# obtendo todos os dados
 from convolutional_nn import CNN_Model
 
+# obtendo todos os dados
 data = getData()
 
 # obtendo one hot encoding dos dados
