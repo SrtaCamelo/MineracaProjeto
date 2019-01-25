@@ -8,7 +8,7 @@ from convolutional_nn import CNN_Model
 data = getData()
 
 # obtendo one hot encoding dos dados
-data.docs, words_size = text_to_onehot(data.docs)
+# data.docs, words_size = text_to_onehot(data.docs)
 
 # dividindo em treino e teste
 x_train, y_train, x_test, y_test = data.get_train_test(0.3, 1000)
