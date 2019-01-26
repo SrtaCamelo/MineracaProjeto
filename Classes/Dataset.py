@@ -91,3 +91,16 @@ class Dataset:
             wb.save("dataset.xls")
         except IOError:
             wb.save("dataset.xls")
+
+    @staticmethod
+    def to_string(data):
+        new_docs = []
+
+        for doc in data:
+            text = ""
+            for word in doc:
+                text = text + " " + word
+            new_docs.append(text)
+
+        return new_docs
+
