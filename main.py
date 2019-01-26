@@ -1,24 +1,19 @@
 from Preprocess.Emotional_Words import getDictionary
-from Preprocess.MovieReviewDatasetPreprocessing import getData
-from Preprocess.sequencing import text_to_tfidf, text_to_onehot
-from convolutional_nn import CNN_Model
+from Preprocess import IMDBPreProcessing as imdb
+from Preprocess.sequencing import text_to_tfidf
 
 # obtendo todos os dados
-data = getData()
-
-# obtendo one hot encoding dos dados
-# data.docs, words_size = text_to_onehot(data.docs)
+data = imdb.getData()
 
 # dividindo em treino e teste
-x_train, y_train, x_test, y_test = data.get_train_test(0.3, 1000)
+x_train, y_train, x_test, y_test = data.get_train_test(percent=0.3, num_docs=1000)
 
 
 # obtendo o dicionario
 dictionary = getDictionary(data=x_train)
 
 # obtendo o tf-idf
-x_train = text_to_tfidf(x_train, dictionary)
-x_test = text_to_tfidf(x_train, dictionary)
+x_train = text_to_tfidf(data=x_train,dictionary=dictionary)
+x_test = text_to_tfidf(data=x_train, dictionary=dictionary)
 
-# cnn
-model = CNN_Model(x_train, y_train, x_test, y_test)
+print(x_train)

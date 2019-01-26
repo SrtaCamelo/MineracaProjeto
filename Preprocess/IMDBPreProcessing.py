@@ -8,6 +8,11 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
+
+from Classes.Dataset import Dataset
+from Preprocess.preProcessing import to_process
+
+punctuation = "[!”#$%&’()*+,-./:;<=>?@[\]^_`{|}~]:.'"
 #-----------Functions----------
 """
 :parameter: path (string path)
@@ -57,6 +62,7 @@ Receives a list of texts and returns a tokenized text list (separates each word 
 def tokenizer(textList):
     tokenList = []
     for text in textList:
+        text.lower()
         tokenized = word_tokenize(text,'english')
         filtered = extractStopWords(tokenized)
         tokenList.append(filtered)
@@ -66,7 +72,7 @@ def extractStopWords(data):
     stopWords = set(stopwords.words('english'))
     filteredWords = []
     for word in data:
-        if word not in stopWords:
+        if word not in stopWords and word not in punctuation:
             filteredWords.append(word)
     return filteredWords
 def compute_tf_idf(TextList):
@@ -91,20 +97,30 @@ def pandasDataFrame(tfidf):
 
 
 #------------Main---------------
-mainpath = "C:/Users/SrtaCamelo/Documents/2018.2/Machine_Pacifico/Git_ML/MachineLearning2018.2/ML_P01/DataSet/"     #Change Here to fetch other DataSet
-tags = ["pos_k","neg_k"]
-data = []
-for tag in tags:
-    path = mainpath+tag
-    textList = indexFiles(path)
-    data.append(textList)
+def getData():
+    mainpath = "TextMining/DataSet/imdb/"     #Change Here to fetch other DataSet
+    tags = ["pos_k","neg_k"]
+    data = []
+    for tag in tags:
+        path = mainpath+tag
+        textList = indexFiles(path)
+        data.append(textList)
 
-textList = data[0]+data[1]
-#tokenized_list = tokenizer(textList)
-#print(tokenized_list)
-tfidf = compute_tf_idf(textList)
-print(tfidf)
-pandasDataFrame(tfidf)
+    labels = []
+    for i in range(1100):
+        if i < 550:
+            labels.append(0)
+        else:
+            labels.append(1)
+
+    textList = data[0]+data[1]
+    tokenized_list = to_process(textList)
+
+    data = Dataset()
+    data.docs = tokenized_list
+    data.labels = labels
+
+    return data
 
 
 
