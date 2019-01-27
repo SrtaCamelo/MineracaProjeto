@@ -4,6 +4,7 @@ from Preprocess import AmazonPreprocessing as amazon
 from sklearn.feature_selection import chi2
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
+import pandas as pd
 
 # parameters
 percent_of_train_test = 0.3
@@ -65,6 +66,9 @@ else:
 cv = CountVectorizer(max_df=0.95, min_df=2, max_features=10000, vocabulary=features)
 x_train = cv.fit_transform(data_movies.to_string(x_train)) # tfidf de treino, y_train é o vetor de label
 x_test = cv.fit(data_movies.to_string(x_test)) # tfidf de teste, y_test é o vetor de labels
+
+x_train = pd.DataFrame(x_train)
+x_test = pd.DataFrame(x_test)
 
 mlp = MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto',
                     beta_1=0.9, beta_2=0.999, early_stopping=False,
