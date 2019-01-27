@@ -1,4 +1,4 @@
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from Preprocess import MovieReviewDatasetPreprocessing as movie
 from Preprocess import AmazonPreprocessing as amazon
 from sklearn.feature_selection import chi2
@@ -28,7 +28,6 @@ chi_stats, p_vals = chi2(x_amazon, data_amazon.labels)
 chi_res = sorted(list(zip(cv.get_feature_names(), chi_stats
                        )), key=lambda x: x[1], reverse=True)[0:num_of_features]
 
-print("Top " + str(num_of_features) + " features according to chi square test:")
 
 features_amazon = []
 for chi in chi_res:
@@ -41,7 +40,6 @@ chi_stats, p_vals = chi2(x_movie, y_train)
 chi_res = sorted(list(zip(cv.get_feature_names(), chi_stats
                        )), key=lambda x: x[1], reverse=True)[0:num_of_features]
 
-print("Top " + str(num_of_features) + " features according to chi square test:")
 
 features_movie = []
 for chi in chi_res:
@@ -58,14 +56,13 @@ if features_mode == 'intersec':
 else:
     feature = features_movie + features_amazon
 
-#print(features)
-#sprint(features.__len__())
+print("Top " + str(features.__len__()) + " features according to chi square test:")
 
+print(features)
 # Fazendo o tf-idf já com as features
-
-cv = CountVectorizer(max_df=0.95, min_df=2, max_features=10000, vocabulary=features)
+cv = TfidfVectorizer(smooth_idf=True, min_df=3, norm='l1', vocabulary=features)
 x_train = cv.fit_transform(data_movies.to_string(x_train)) # tfidf de treino, y_train é o vetor de label
-x_test = cv.fit(data_movies.to_string(x_test)) # tfidf de teste, y_test é o vetor de labels
+x_test = cv.fit_transform(data_movies.to_string(x_test)) # tfidf de teste, y_test é o vetor de labels
 
 x_train = pd.DataFrame(x_train)
 x_test = pd.DataFrame(x_test)
