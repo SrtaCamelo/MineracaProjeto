@@ -2,6 +2,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from Preprocess import MovieReviewDatasetPreprocessing as movie
 from Preprocess import AmazonPreprocessing as amazon
 from sklearn.feature_selection import chi2
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score
 
 # parameters
 percent_of_train_test = 0.3
@@ -55,12 +57,25 @@ if features_mode == 'intersec':
 else:
     feature = features_movie + features_amazon
 
-print(features)
-print(features.__len__())
+#print(features)
+#sprint(features.__len__())
 
 # Fazendo o tf-idf já com as features
 
 cv = CountVectorizer(max_df=0.95, min_df=2, max_features=10000, vocabulary=features)
 x_train = cv.fit_transform(data_movies.to_string(x_train)) # tfidf de treino, y_train é o vetor de label
 x_test = cv.fit(data_movies.to_string(x_test)) # tfidf de teste, y_test é o vetor de labels
+
+mlp = MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto',
+                    beta_1=0.9, beta_2=0.999, early_stopping=False,
+                    epsilon=1e-08, hidden_layer_sizes=(5, 2),
+                    learning_rate='constant', learning_rate_init=0.001,
+                    max_iter=200, momentum=0.9, n_iter_no_change=10,
+                    nesterovs_momentum=True, power_t=0.5, random_state=1,
+                    shuffle=True, solver='lbfgs', tol=0.0001,
+                    validation_fraction=0.1, verbose=False, warm_start=False)
+mlp.fit(x_train, y_train)
+mlp_predic = mlp.predict(x_test)
+mlp_accu = accuracy_score(y_test, mlp_predic)
+print(mlp_accu)
 
