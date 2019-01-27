@@ -64,8 +64,8 @@ cv = TfidfVectorizer(smooth_idf=True, min_df=3, norm='l1', vocabulary=features)
 x_train = cv.fit_transform(data_movies.to_string(x_train)) # tfidf de treino, y_train é o vetor de label
 x_test = cv.fit_transform(data_movies.to_string(x_test)) # tfidf de teste, y_test é o vetor de labels
 
-x_train = pd.DataFrame(x_train)
-x_test = pd.DataFrame(x_test)
+#x_train = pd.DataFrame(x_train)
+#x_test = pd.DataFrame(x_test)
 
 mlp = MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto',
                     beta_1=0.9, beta_2=0.999, early_stopping=False,
