@@ -9,7 +9,7 @@ from keras.preprocessing.text import text_to_word_sequence
 lemmatizer = WordNetLemmatizer()
 punctuation = "[!”#$%&’()*+,-./:;<=>?@[\]^_`{|}~]:"
 
-def to_process(docs):
+def to_process(docs, pos):
     
     # Reading stop-words
     arq = open('Preprocess/sw.txt', 'r')
@@ -35,12 +35,42 @@ def to_process(docs):
         
         # POS filter: only adverbs, adjectives and nouns
         pos_tags = nltk.pos_tag(result)
-        result = []
-        for word in pos_tags:
-            if word[1] == 'JJ' or word[1] == 'JJR' or word[1] == 'JJS' or word[1] == 'RB' or word[1] == 'RBR' or word[1] == 'RBS' or word[1] == 'NN' or word[1] == 'NNS' or word[1] == 'NNP' or word[1] == 'NNPS':
-                result.append(word[0])
+        result_pos = []
 
+        if pos == 'nouns':
+            for word in pos_tags:
+                if word[1] == 'NN' or word[1] == 'NNS' or word[1] == 'NNP' or \
+                        word[1] == 'NNPS':
+                    result_pos.append(word[0])
 
-        new_docs.append(result)
+        elif pos == 'adjectives':
+            for word in pos_tags:
+                if word[1] == 'JJ' or word[1] == 'JJR' or word[1] == 'JJS':
+                    result_pos.append(word[0])
+
+        elif pos == 'nouns+adjectives':
+            for word in pos_tags:
+                if word[1] == 'JJ' or word[1] == 'JJR' or word[1] == 'JJS' or word[1] == 'RB' or \
+                        word[1] == 'NN' or word[1] == 'NNS' or word[1] == 'NNP' or \
+                        word[1] == 'NNPS':
+                    result_pos.append(word[0])
+
+        elif pos == 'nouns+adjectives+adverbs':
+            for word in pos_tags:
+                if word[1] == 'JJ' or word[1] == 'JJR' or word[1] == 'JJS' or word[1] == 'RB' or \
+                        word[1] == 'RBR' or word[1] == 'RBS' or word[1] == 'NN' or word[1] == 'NNS' or word[1] == 'NNP' or \
+                        word[1] == 'NNPS':
+                    result_pos.append(word[0])
+
+        elif pos == 'partial':
+            for word in pos_tags:
+                if word[1] == 'JJ' or word[1] == 'JJR' or word[1] == 'JJS' or word[1] == 'RB' or \
+                        word[1] == 'RBR' or word[1] == 'RBS' or word[1] == 'NN' or word[1] == 'NNS' or word[1] == 'NNP' or \
+                        word[1] == 'NNPS' or word[1] == 'VB' or word[1] == 'VBD' or word[1] == 'VBG' or \
+                        word[1] == 'VBN' or word[1] == 'VBP' or word[1] == 'VBZ':
+                    result_pos.append(word[0])
+        else:
+            result_pos = result
+        new_docs.append(result_pos)
 
     return new_docs

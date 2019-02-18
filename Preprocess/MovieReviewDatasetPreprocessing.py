@@ -29,8 +29,6 @@ def genRottenData():
                 break
         i = i + 1
 
-    dataset.docs = to_process(dataset.docs)
-
     #with open('Preprocess/rotten_dataset', 'wb') as fp:
     #   pickle.dump(dataset, fp)
     return dataset
