@@ -4,6 +4,9 @@ import xlrd
 import xlwt
 from xlutils.copy import copy
 
+from Classes.Data import Data
+
+
 class Dataset:
     def __init__(self):
         self.docs = []
@@ -61,6 +64,29 @@ class Dataset:
             labels_test.append(self.labels[i])
 
         return docs_train, labels_train, docs_test, labels_test
+
+    def divide(self, num_docs):
+        pos = 0
+        neg = 0
+
+        result = Dataset()
+
+        for i in range(len(self.labels)):
+            text = self.docs[i]
+            label = self.labels[i]
+            if label == 1 and pos < num_docs / 2:
+                data = Data(doc=text, label=label)
+
+                result.add(data)
+                pos = pos + 1
+
+            elif label == 0 and neg < num_docs / 2:
+                data = Data(doc=text, label=label)
+
+                result.add(data)
+                neg = neg + 1
+
+        return result
 
     @staticmethod
     def criar_arquivo():
